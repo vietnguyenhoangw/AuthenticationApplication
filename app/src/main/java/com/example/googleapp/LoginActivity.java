@@ -18,10 +18,10 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
-    FirebaseAuth mAuth;
+    static FirebaseAuth mAuth = FirebaseAuth.getInstance();;
 
     TextView tvRegister;
-    EditText edtUser, edtPass;
+    static EditText edtUser, edtPass;
     String username, password;
     Button btnLogin;
 
@@ -29,8 +29,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        mAuth = FirebaseAuth.getInstance();
 
         createWidget();
 
@@ -53,7 +51,10 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
-                                        // oke
+                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                        intent.putExtra("username", username);
+
+                                        startActivity(intent);
                                     }
                                     else {
                                         Toast.makeText(LoginActivity.this, "" +
