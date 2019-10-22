@@ -127,12 +127,13 @@
                 android:src="@drawable/gg_icon"/>
 
             <ImageView
+                android:id="@+id/imgFF"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_below="@id/textView2"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@id/imgGG"
                 android:padding="2dp"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
                 android:src="@drawable/icon_fb" />
         </RelativeLayout>
     </FrameLayout>
