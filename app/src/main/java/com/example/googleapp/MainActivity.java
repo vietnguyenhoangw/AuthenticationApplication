@@ -22,16 +22,12 @@ public class MainActivity extends AppCompatActivity {
 
     TextView tvUsername;
     Button btnLogout;
-    GoogleSignInClient mGoogleSignInClient;
-
-    FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mAuth = FirebaseAuth.getInstance();
 
         tvUsername = findViewById(R.id.tvUsername);
         btnLogout = findViewById(R.id.btnLogout);
@@ -53,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        mAuth.signOut();
+        FirebaseAuth.getInstance().signOut();
 
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
