@@ -71,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // create firebase auth.
         mAuth = FirebaseAuth.getInstance();
+
         callbackManager = CallbackManager.Factory.create();
 
         // register Google sign in.
@@ -215,6 +216,19 @@ public class LoginActivity extends AppCompatActivity {
 
     //----------------------------------------------------------------------------------------------
     /* LOGIN WITH GOOGLE ACCOUNT */
+    private void updateUIWithGGAccount(GoogleSignInAccount acct) {
+        if (acct != null) {
+            String personName = acct.getDisplayName();
+            String personGivenName = acct.getGivenName();
+            String personFamilyName = acct.getFamilyName();
+            String personEmail = acct.getEmail();
+            String personId = acct.getId();
+            Uri personPhoto = acct.getPhotoUrl();
+
+            username = personName;
+        }
+    }
+
     private void registerGGSignInClient() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.android_client_id))
@@ -243,7 +257,7 @@ public class LoginActivity extends AppCompatActivity {
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
-                
+                Log.d("TAG", e.getMessage());
                 // ...
             }
         }
@@ -284,21 +298,19 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void updateUIWithGGAccount(GoogleSignInAccount acct) {
-        if (acct != null) {
-            String personName = acct.getDisplayName();
-            String personGivenName = acct.getGivenName();
-            String personFamilyName = acct.getFamilyName();
-            String personEmail = acct.getEmail();
-            String personId = acct.getId();
-            Uri personPhoto = acct.getPhotoUrl();
-
-            username = personName;
-        }
-    }
-
     //----------------------------------------------------------------------------------------------
     /* LOGIN WITH FACEBOOK ACCOUNT */
+    private void updateUI(String user) {
+        username = user;
+
+        Toast.makeText(this, "User Login successfully", Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent.putExtra("username", username);
+        startActivity(intent);
+        finish();
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -306,16 +318,8 @@ public class LoginActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         if (currentUser != null) {
-            updateUI();
+            updateUI(currentUser.getDisplayName());
         }
-    }
-
-    private void updateUI() {
-        Toast.makeText(this, "OK", Toast.LENGTH_SHORT).show();
-
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
     }
 
     private void handleFacebookAccessToken(AccessToken token) {
@@ -328,12 +332,13 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
+                            FirebaseUser user = mAuth.getCurrentUser();
                             Log.d(TAG, "signInWithCredential:success");
-                            updateUI();
+                            updateUI(user.getDisplayName());
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                            Log.w("ERR", "signInWithCredential:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication failed. " + task.getException(),
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
