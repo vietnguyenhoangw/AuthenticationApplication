@@ -17,11 +17,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
     TextView tvUsername;
     Button btnLogout;
+
+    FirebaseUser firebaseUser;
+    FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +43,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        getUsername();
+        mAuth = FirebaseAuth.getInstance();
+        firebaseUser = mAuth.getCurrentUser();
+
+        tvUsername.setText(firebaseUser.getDisplayName());
     }
 
     /* logout firebase
@@ -55,11 +62,5 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
 
         finish();
-    }
-
-    public void getUsername() {
-        Intent intent = getIntent();
-        String getUsername = intent.getStringExtra("username");
-        tvUsername.setText(getUsername);
     }
 }

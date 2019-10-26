@@ -276,7 +276,6 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.putExtra("username", username);
                             startActivity(intent);
                             finish();
                             Toast.makeText(LoginActivity.this, "User Login successfully.", Toast.LENGTH_SHORT).show();
@@ -300,13 +299,10 @@ public class LoginActivity extends AppCompatActivity {
 
     //----------------------------------------------------------------------------------------------
     /* LOGIN WITH FACEBOOK ACCOUNT */
-    private void updateUI(String user) {
-        username = user;
-
+    private void updateUI() {
         Toast.makeText(this, "User Login successfully", Toast.LENGTH_SHORT).show();
 
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        intent.putExtra("username", username);
         startActivity(intent);
         finish();
     }
@@ -318,7 +314,7 @@ public class LoginActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         if (currentUser != null) {
-            updateUI(currentUser.getDisplayName());
+            updateUI();
         }
     }
 
@@ -334,7 +330,7 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
                             Log.d(TAG, "signInWithCredential:success");
-                            updateUI(user.getDisplayName());
+                            updateUI();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("ERR", "signInWithCredential:failure", task.getException());
