@@ -46,7 +46,12 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         firebaseUser = mAuth.getCurrentUser();
 
-        tvUsername.setText(firebaseUser.getDisplayName());
+        if (firebaseUser.getDisplayName() == null) {
+            tvUsername.setText(firebaseUser.getEmail());
+        }
+        else {
+            tvUsername.setText(firebaseUser.getDisplayName());
+        }
     }
 
     /* logout firebase
